@@ -68,7 +68,7 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    print("Server received request for 'station' page...")
+    print("Server received request for 'stations' page...")
 
     station_list = session.query(Measurement.station).distinct()
 
@@ -93,12 +93,12 @@ def start(start):
     print("Server received request for 'start' page...")
 
     results = session.query(Measurement.date, func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-    filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).group_by(Measurement.date).all()
+    filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).all()
 
     dates = []                       
     for result in results:
         date_dict = {}
-        date_dict["Date"] = result[0]
+        date_dict["Start Date"] = result[0]
         date_dict["TMIN"] = result[1]
         date_dict["TAVG"] = result[2]
         date_dict["TMAX"] = result[3]
@@ -110,12 +110,13 @@ def start_end(start, end):
     print("Server received request for 'Start_End' page...")
 
     results = session.query(Measurement.date, func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-    filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).filter(func.strftime("%Y-%m-%d", Measurement.date) <= end).group_by(Measurement.date).all()
+    filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).filter(func.strftime("%Y-%m-%d", Measurement.date) <= end).all()
 
     dates = []                       
     for result in results:
         date_dict = {}
-        date_dict["Date"] = result[0]
+        date_dict["Start Date"] = start
+        date_dict["End Date"] = end
         date_dict["TMIN"] = result[1]
         date_dict["TAVG"] = result[2]
         date_dict["TMAX"] = result[3]
